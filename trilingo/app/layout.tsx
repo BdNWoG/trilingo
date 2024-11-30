@@ -8,6 +8,11 @@ const nunito = Nunito({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Trilingo",
   description: "A Duolingo-ish Thing",
+  icons: {
+    icon: "mascot.svg", 
+    shortcut: "mascot.svg", 
+    apple: "mascot.svg",
+  },
 };
 
 export default function RootLayout({
