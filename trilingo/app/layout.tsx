@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";  
+import { ExitModel } from "@/components/models/exit-model";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -24,10 +25,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-          className={nunito.className}
-        >
+        <body className={nunito.className}>
           <Toaster />
+          <ExitModel/>
           {children}
         </body>
       </html>
