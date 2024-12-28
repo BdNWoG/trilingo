@@ -36,12 +36,42 @@ export const Quiz = ( {
     const challenge = challenges[activeIndex];
     const options = challenge?.challengeOptions ?? [];
 
+    const onNext = () => {
+        setActiveIndex((current) => current + 1);
+    }
+
     const onSelect = (id: number) => {
         if (status !== "none") return;
 
         setSelectedOption(id);
     }
 
+    const onContinue = () => {
+        if (!selectedOption) return;
+
+        if (status === "wrong") {
+            setStatus("none");
+            setSelectedOption(undefined);
+            return;
+        }
+
+        if (status === "correct") {
+            onNext();
+            setStatus("none");
+            setSelectedOption(undefined);
+            return;
+        }
+
+        const correctOption = options.find((option) => option.correct);
+
+        if (!correctOption) return;
+
+        if (correctOption.id === selectedOption) {
+            console.log("correct");
+        } else {
+            console.error("wrong");
+        }
+    }
 
     const title = challenge.type === "ASSIST" ? "Select the correct meaning" : challenge.question;
 
@@ -63,7 +93,7 @@ export const Quiz = ( {
                     </div>
                 </div>
             </div>
-            <Footer disabled={!selectedOption} status={status} onCheck={() => {}}/>
+            <Footer disabled={!selectedOption} status={status} onCheck={onContinue}/>
         </>
     );
 }
