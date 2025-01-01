@@ -105,6 +105,20 @@ const main = async () => {
                 question: "What is the Spanish word for 'the boy'?",
                 order: 1,
             },
+            {
+                id: 2,
+                lessonId: 1,
+                type: "ASSIST",
+                question: "'the boy'",
+                order: 2,
+            },
+            {
+                id: 3,
+                lessonId: 1,
+                type: "SELECT",
+                question: "What is the Spanish word for 'the girl'?",
+                order: 3,
+            },
         ]);
 
         await db.insert(schema.challengeOptions).values([
@@ -127,6 +141,51 @@ const main = async () => {
             {
                 id: 3,
                 challengeId: 1,
+                imageSrc: "/zombie.svg",
+                text: "el zombie",
+                correct: false,
+                audioSrc: "/es_zombie.mp3",
+            },
+            {
+                id: 4,
+                challengeId: 2,
+                text: "el nino",
+                correct: true,
+                audioSrc: "/es_boy.mp3",
+            },
+            {
+                id: 5,
+                challengeId: 2,
+                text: "la nina",
+                correct: false,
+                audioSrc: "/es_girl.mp3",
+            },
+            {
+                id: 6,
+                challengeId: 2,
+                text: "el zombie",
+                correct: false,
+                audioSrc: "/es_zombie.mp3",
+            },
+            {
+                id: 7,
+                challengeId: 3,
+                imageSrc: "/boy.svg",
+                text: "el nino",
+                correct: false,
+                audioSrc: "/es_boy.mp3",
+            },
+            {
+                id: 8,
+                challengeId: 3,
+                imageSrc: "/girl.svg",
+                text: "la nina",
+                correct: true,
+                audioSrc: "/es_girl.mp3",
+            },
+            {
+                id: 9,
+                challengeId: 3,
                 imageSrc: "/zombie.svg",
                 text: "el zombie",
                 correct: false,

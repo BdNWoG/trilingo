@@ -1,12 +1,13 @@
 "use client";
 
 import { challenges, challengeOptions } from "@/db/schema";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Header } from "./header";
 import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
-import { stat } from "fs";
 import { Footer } from "./footer";
+import { upsertChallengeProgress } from "@/actions/challenge-progress";
+import { toast } from "sonner";
 
 type Props = {
     initialPercentage: number;
@@ -22,6 +23,8 @@ type Props = {
 export const Quiz = ( {
     initialPercentage, initialHearts, initialLessonId, initialLessonChallenges, userSubscription,
 }: Props) => {
+    const [pending, startTransition] = useTransition();
+
     const [hearts, setHearts] = useState(initialHearts);
     const [percentage, setPercentage] = useState(initialPercentage);
     const [challenges] = useState(initialLessonChallenges);
@@ -67,7 +70,21 @@ export const Quiz = ( {
         if (!correctOption) return;
 
         if (correctOption.id === selectedOption) {
-            console.log("correct");
+            startTransition(() => {
+                upsertChallengeProgress(challenge.id).then((response) => {
+                    if (response?.error === "hearts") {
+                        console.error("No hearts left");
+                        return;
+                    };
+
+                    setStatus("correct");
+                    setPercentage((prev) => prev + 100 / challenges.length);
+
+                    if (initialPercentage === 100) {
+                        setHearts((prev) => Math.min(prev + 1, 5));
+                    }
+                }).catch(() => toast.error("Something went wrong"));
+            })
         } else {
             console.error("wrong");
         }
@@ -88,7 +105,7 @@ export const Quiz = ( {
                             {challenge.type === "ASSIST" && (
                                 <QuestionBubble question={challenge.question} />
                             )}
-                            <Challenge options={options} onSelect={onSelect} status={status} selectedOption={selectedOption} disabled={false} type={challenge.type}/>
+                            <Challenge options={options} onSelect={onSelect} status={status} selectedOption={selectedOption} disabled={pending} type={challenge.type}/>
                         </div>
                     </div>
                 </div>
